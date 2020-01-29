@@ -145,22 +145,21 @@ class Images(object):
                 fields = name.split(':')
 
                 o = self._load_info_from_file(path)
-                alias = '/'.join(fields)
+                alias = [fields[0], fields[1]]
+                if fields[3] != 'default':
+                    alias.append(fields[3])
                 d = {
                     'versions': {},
                     'os': fields[0],
                     'release': fields[1],
                     'release_title': fields[1],
                     'arch': fields[2],
-                    'aliases': alias
+                    'aliases': '/'.join(alias)
                 }
                 # direct copy fields:
                 for field in ['os', 'release_title', 'aliases']:
                     if field in o:
                         d[field] = o[field]
-
-                if alias not in d['aliases'].split(","):
-                    d['aliases'] += "," + alias
 
                 self.root['products'].update( { name: d } )
 
